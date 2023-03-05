@@ -10,13 +10,12 @@ namespace MyCourse.Controllers
     {
         public IActionResult Index()
         {
-            //return View();
-            return Content("Sono Index");
+            return View();
         }
 
         public IActionResult Detail(string id)
         {
-            return Content($"Sono Detail, ho ricevuto l'id {id}");
+            return View();
         }
     }
 }
