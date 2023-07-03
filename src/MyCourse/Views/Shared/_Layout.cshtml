@@ -12,22 +12,16 @@
     <header>
         <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
             <a class="navbar-brand"><img src="~/logo.svg" height="30"></a>
-            <button class="navbar-toggler" data-target="#navbar" data-toggle="collapse" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
+            <button class="navbar-toggler" data-target="#navbar" data-toggle="collapse">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div id="navbar" class="collapse navbar-collapse">
                 <ul class="navbar-nav mr-auto">
                     <li class="nav-item active">
-                        <a class="nav-link" href="#">Pagina1 <span class="sr-only">(current)</span></a>
+                        <a class="nav-link" asp-action="Index" asp-controller="Home">Home</a>
                     </li>
                     <li class="nav-item active">
-                        <a class="nav-link" href="#">Pagina2 <span class="sr-only">(current)</span></a>
-                    </li>
-                    <li class="nav-item active">
-                        <a class="nav-link" href="#">Pagina3 <span class="sr-only">(current)</span></a>
-                    </li>
-                    <li class="nav-item active">
-                        <a class="nav-link" href="#">Pagina4 <span class="sr-only">(current)</span></a>
+                        <a class="nav-link" asp-action="Index" asp-controller="Courses">Catalogo corsi</a>
                     </li>
                 </ul>
             </div>
