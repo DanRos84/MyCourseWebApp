@@ -1,14 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using System.IO;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using MyCourse.Models.Services.Application;
+using MyCourse.Models.Services.Infrastructure;
 
 namespace MyCourse
 {
@@ -19,35 +20,33 @@ namespace MyCourse
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
-            services.AddTransient<ICourseService, CourseService>();
+            services.AddTransient<ICourseService, AdoNetCourseService>();
+            services.AddTransient<IDatabaseAccessor, SqliteDatabaseAccessor>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, IApplicationLifetime lifetime)
         {
             //if (env.IsDevelopment())
-            if (env.IsEnvironment("Developer"))
+            if (env.IsEnvironment("Development"))
             {
                 app.UseDeveloperExceptionPage();
-                // app.UseHttpsRedirection();
 
-                //Aggiorniamo un file per notificare a BrowserSync che deve aggiornare la pagina
+                //Aggiorniamo un file per notificare al BrowserSync che deve aggiornare la pagina
                 lifetime.ApplicationStarted.Register(() =>
                 {
                     string filePath = Path.Combine(env.ContentRootPath, "bin/reload.txt");
                     File.WriteAllText(filePath, DateTime.Now.ToString());
                 });
             }
-
-                app.UseStaticFiles();
-
+            app.UseStaticFiles();
+            
             //app.UseMvcWithDefaultRoute();
-            app.UseMvc(routBuilder =>
+            app.UseMvc(routeBuilder => 
             {
-                routBuilder.MapRoute("default", "{controller=Home}/{action=Index}/{id?}");
+                // Esempio di percorso conforme al template route: /courses/detail/5
+                routeBuilder.MapRoute("default", "{controller=Home}/{action=Index}/{id?}");
             });
-
-
         }
     }
 }
