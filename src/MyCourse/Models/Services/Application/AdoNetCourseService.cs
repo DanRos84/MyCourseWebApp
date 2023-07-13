@@ -36,7 +36,7 @@ namespace MyCourse.Models.Services.Application
                 LessonViewModel lessonViewModel = LessonViewModel.FromDataRow(lessonRow);
                 courseDetailViewModel.Lessons.Add(lessonViewModel);
             }
-            return courseDetailViewModel; 
+            return courseDetailViewModel;
         }
 
         public async Task<List<CourseViewModel>> GetCoursesAsync()

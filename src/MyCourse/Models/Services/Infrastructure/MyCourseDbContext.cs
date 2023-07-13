@@ -1,6 +1,8 @@
 ﻿using System;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
+using MyCourse.Models.ValueObjects;
 
 namespace MyCourse.MOdels.Entities
 {
@@ -15,8 +17,8 @@ namespace MyCourse.MOdels.Entities
         {
         }
 
-        public virtual DbSet<Courses> Courses { get; set; }
-        public virtual DbSet<Lessons> Lessons { get; set; }
+        public virtual DbSet<Course> Courses { get; set; }
+        public virtual DbSet<Lesson> Lessons { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -31,8 +33,31 @@ namespace MyCourse.MOdels.Entities
         {
             modelBuilder.HasAnnotation("ProductVersion", "2.2.4-servicing-10062");
 
-            modelBuilder.Entity<Courses>(entity =>
+            modelBuilder.Entity<Course>(entity =>
             {
+                entity.ToTable("Courses"); //superfluo se la tabella si chiama come la propietà si chiama cche espone i DbSet
+                entity.HasKey(course => course.Id); //SUperfluo se la prop si chiama Id oppure CourseId 
+                // entity.HasKey(Courses => new { Courses.Id, Courses.Author}); //questo in caso di chiavi composite
+
+                //Mapping per gli owned types (entità)
+                entity.OwnsOne(course => course.CurrentPrice, BuilderExtensions => {
+                    BuilderExtensions.Property(money => money.Currency)
+                    .HasConversion<string>()
+                    .HasColumnName("CurrentPrice_Currency");//superfluo perchè le nostre colonne nel BD seguono già la convenzione di nomi
+                    BuilderExtensions.Property(money => money.Amount).HasColumnName("CurrentPrice_Amount");//superfluo perchè le nostre colonne nel BD seguono già la convenzione di nomi
+                });
+
+                entity.OwnsOne(course => course.FullPrice, builder => {
+                    builder.Property(money => money.Currency).HasConversion<string>();
+                });
+
+                //Mapping per le relazioni
+                entity.HasMany(course => course.Lessons)
+                        .WithOne(lesson => lesson.Course)
+                        .HasForeignKey(lesson => lesson.CourseId);//superflua se la proprietà ha il nome dell'entità principale ("Course") + "Id"
+
+                #region Mapping generato automaticamente dal tool di reverse engeniring
+                /*
                 entity.Property(e => e.Id).ValueGeneratedNever();
 
                 entity.Property(e => e.Author)
@@ -72,10 +97,17 @@ namespace MyCourse.MOdels.Entities
                 entity.Property(e => e.Title)
                     .IsRequired()
                     .HasColumnType("TEXT (100)");
+                    */
+                    #endregion
             });
 
-            modelBuilder.Entity<Lessons>(entity =>
+            modelBuilder.Entity<Lesson>(entity =>
             {
+                entity.HasOne(lesson => lesson.Course)
+                        .WithMany(course => course.Lessons);
+
+                #region Mapping generato automaticamente dal tool di reverse engeniring
+                /*
                 entity.Property(e => e.Id).ValueGeneratedNever();
 
                 entity.Property(e => e.Description).HasColumnType("TEXT (10000)");
@@ -92,6 +124,8 @@ namespace MyCourse.MOdels.Entities
                 entity.HasOne(d => d.Course)
                     .WithMany(p => p.Lessons)
                     .HasForeignKey(d => d.CourseId);
+                    */
+                #endregion
             });
         }
     }
