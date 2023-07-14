@@ -46,9 +46,10 @@ namespace MyCourse.Models.Services.Application
 
             return viewModel;
         }
+
         public async Task<List<CourseViewModel>> GetCoursesAsync()
         {
-            List<CourseViewModel> courses = await dbContext.Courses.Select(course => 
+            IQueryable<CourseViewModel> queryLinq = dbContext.Courses.Select(course => 
             new CourseViewModel {
                 Id = course.Id,
                 Title = course.Title,
@@ -57,8 +58,9 @@ namespace MyCourse.Models.Services.Application
                 Rating = course.Rating,
                 CurrentPrice = course.CurrentPrice,
                 FullPrice = course.FullPrice
-            })
-            .ToListAsync(); //La query al database viene inviata qui, quando manifestiamo l'intenzione di voler leggere i risultati
+            });
+
+            List<CourseViewModel> courses = await queryLinq.ToListAsync(); //La query al database viene inviata qui, quando manifestiamo l'intenzione di voler leggere i risultati
 
             return courses;
         }
