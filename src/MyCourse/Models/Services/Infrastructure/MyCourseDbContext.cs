@@ -2,9 +2,10 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
+using MyCourse.Models.Entities;
 using MyCourse.Models.ValueObjects;
 
-namespace MyCourse.MOdels.Entities
+namespace MyCourse.Models.Services.Infrastructure
 {
     public partial class MyCourseDbContext : DbContext
     {
@@ -35,26 +36,24 @@ namespace MyCourse.MOdels.Entities
 
             modelBuilder.Entity<Course>(entity =>
             {
-                entity.ToTable("Courses"); //superfluo se la tabella si chiama come la propietà si chiama cche espone i DbSet
-                entity.HasKey(course => course.Id); //SUperfluo se la prop si chiama Id oppure CourseId 
+                entity.ToTable("Courses"); //superfluo se la tabella si chiama come la propietà che espone i DbSet
+                //entity.HasKey(course => course.Id); //Superfluo se la prop si chiama Id oppure CourseId 
                 // entity.HasKey(Courses => new { Courses.Id, Courses.Author}); //questo in caso di chiavi composite
 
-                //Mapping per gli owned types (entità)
-                entity.OwnsOne(course => course.CurrentPrice, BuilderExtensions => {
-                    BuilderExtensions.Property(money => money.Currency)
-                    .HasConversion<string>()
-                    .HasColumnName("CurrentPrice_Currency");//superfluo perchè le nostre colonne nel BD seguono già la convenzione di nomi
-                    BuilderExtensions.Property(money => money.Amount).HasColumnName("CurrentPrice_Amount");//superfluo perchè le nostre colonne nel BD seguono già la convenzione di nomi
+                //Mapping per gli owned types (EFCore), ovvero delle proprietà complesse
+                entity.OwnsOne(course => course.CurrentPrice, builder => {
+                    builder.Property(money => money.Currency).HasConversion<string>().HasColumnName("CurrentPrice_Currency");//superfluo perchè le nostre colonne nel BD seguono già la convenzione di nomi
+                    builder.Property(money => money.Amount).HasColumnName("CurrentPrice_Amount");//superfluo perchè le nostre colonne nel BD seguono già la convenzione di nomi
                 });
 
                 entity.OwnsOne(course => course.FullPrice, builder => {
                     builder.Property(money => money.Currency).HasConversion<string>();
                 });
 
-                //Mapping per le relazioni
+                //Mapping per le relazioni, ovvero delle proprietà di navigazione
                 entity.HasMany(course => course.Lessons)
-                        .WithOne(lesson => lesson.Course)
-                        .HasForeignKey(lesson => lesson.CourseId);//superflua se la proprietà ha il nome dell'entità principale ("Course") + "Id"
+                        .WithOne(lesson => lesson.Course);
+                        //.HasForeignKey(lesson => lesson.CourseId);//superflua se la proprietà ha il nome dell'entità principale ("Course") + "Id"
 
                 #region Mapping generato automaticamente dal tool di reverse engeniring
                 /*
