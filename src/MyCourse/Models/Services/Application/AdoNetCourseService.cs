@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Options;
+using MyCourse.Models.Options;
 using MyCourse.Models.Services.Infrastructure;
 using MyCourse.Models.ViewModels;
 
@@ -10,8 +12,11 @@ namespace MyCourse.Models.Services.Application
     public class AdoNetCourseService : ICourseService
     {
         private readonly IDatabaseAccessor db;
-        public AdoNetCourseService(IDatabaseAccessor db)
+        private readonly IOptionsMonitor<CoursesOptions> coursesOptions;
+
+        public AdoNetCourseService(IDatabaseAccessor db, IOptionsMonitor<CoursesOptions> coursesOptions)
         {
+            this.coursesOptions = coursesOptions;
             this.db = db;
         }
         public async Task<CourseDetailViewModel> GetCourseAsync(int id)
