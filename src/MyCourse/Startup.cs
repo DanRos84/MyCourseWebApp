@@ -62,6 +62,11 @@ namespace MyCourse
                     File.WriteAllText(filePath, DateTime.Now.ToString());
                 });
             }
+            else
+            {
+                app.UseExceptionHandler("/Error");
+            }
+            
             app.UseStaticFiles();
             
             //app.UseMvcWithDefaultRoute();
