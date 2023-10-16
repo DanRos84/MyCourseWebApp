@@ -6,6 +6,5 @@
     },
     "fontAwesomeAutocomplete.patterns": ["**/*.cshtml"],
     "fontAwesomeAutocomplete.triggerWord": "f",
-    "dotnet.defaultSolution": "MyCourse.sln",
     "gitlens.currentLine.enabled": false
 }

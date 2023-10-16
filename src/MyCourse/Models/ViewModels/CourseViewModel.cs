@@ -1,4 +1,4 @@
-using  System;
+using System;
 using System.Data;
 using MyCourse.Models.Entities;
 using MyCourse.Models.Enums;
@@ -49,5 +49,4 @@ namespace MyCourse.Models.ViewModels
             };
         }
     }
-    
 }

@@ -12,16 +12,16 @@ namespace MyCourse.Models.Services.Infrastructure
 {
     public class SqliteDatabaseAccessor : IDatabaseAccessor
     {
-        private ILogger<SqliteDatabaseAccessor> logger;
-        private readonly IOptionsMonitor<ConnectionStringsOptions> connectionStringsOptions;
+        private readonly ILogger<SqliteDatabaseAccessor> logger;
+        private readonly IOptionsMonitor<ConnectionStringsOptions> connectionStringOptions;
 
-        public SqliteDatabaseAccessor(ILogger<SqliteDatabaseAccessor> logger, IOptionsMonitor<ConnectionStringsOptions> connectionStringsOptions)
+        public SqliteDatabaseAccessor(ILogger<SqliteDatabaseAccessor> logger, IOptionsMonitor<ConnectionStringsOptions> connectionStringOptions)
         {
             this.logger = logger;
-            this.connectionStringsOptions = connectionStringsOptions;
+            this.connectionStringOptions = connectionStringOptions;
         }
         public async Task<DataSet> QueryAsync(FormattableString formattableQuery)
-        {   
+        {
             logger.LogInformation(formattableQuery.Format, formattableQuery.GetArguments());
 
             //Creiamo dei SqliteParameter a partire dalla FormattableString
@@ -36,10 +36,9 @@ namespace MyCourse.Models.Services.Infrastructure
             string query = formattableQuery.ToString();
 
             //Colleghiamoci al database Sqlite, inviamo la query e leggiamo i risultati
-            string connectionString = connectionStringsOptions.CurrentValue.Default;
+            string connectionString = connectionStringOptions.CurrentValue.Default;
 
-
-            using(var conn = new SqliteConnection(connectionString))
+            using (var conn = new SqliteConnection(connectionString))
             {
                 await conn.OpenAsync();
                 using (var cmd = new SqliteCommand(query, conn))
@@ -52,14 +51,14 @@ namespace MyCourse.Models.Services.Infrastructure
                     using (var reader = await cmd.ExecuteReaderAsync())
                     {
                         var dataSet = new DataSet();
-                        
+
                         //TODO: La riga qui sotto va rimossa quando la issue sarà risolta
                         //https://github.com/aspnet/EntityFrameworkCore/issues/14963
                         dataSet.EnforceConstraints = false;
 
                         //Creiamo tanti DataTable per quante sono le tabelle
                         //di risultati trovate dal SqliteDataReader
-                        do 
+                        do
                         {
                             var dataTable = new DataTable();
                             dataSet.Tables.Add(dataTable);

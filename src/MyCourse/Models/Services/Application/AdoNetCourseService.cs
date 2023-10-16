@@ -16,7 +16,6 @@ namespace MyCourse.Models.Services.Application
         private readonly ILogger<AdoNetCourseService> logger;
         private readonly IDatabaseAccessor db;
         private readonly IOptionsMonitor<CoursesOptions> coursesOptions;
-
         public AdoNetCourseService(ILogger<AdoNetCourseService> logger, IDatabaseAccessor db, IOptionsMonitor<CoursesOptions> coursesOptions)
         {
             this.coursesOptions = coursesOptions;
@@ -25,7 +24,6 @@ namespace MyCourse.Models.Services.Application
         }
         public async Task<CourseDetailViewModel> GetCourseAsync(int id)
         {
-
             logger.LogInformation("Course {id} requested", id);
 
             FormattableString query = $@"SELECT Id, Title, Description, ImagePath, Author, Rating, FullPrice_Amount, FullPrice_Currency, CurrentPrice_Amount, CurrentPrice_Currency FROM Courses WHERE Id={id}
@@ -46,7 +44,7 @@ namespace MyCourse.Models.Services.Application
             //Course lessons
             var lessonDataTable = dataSet.Tables[1];
 
-            foreach(DataRow lessonRow in lessonDataTable.Rows) 
+            foreach (DataRow lessonRow in lessonDataTable.Rows)
             {
                 LessonViewModel lessonViewModel = LessonViewModel.FromDataRow(lessonRow);
                 courseDetailViewModel.Lessons.Add(lessonViewModel);
@@ -60,7 +58,8 @@ namespace MyCourse.Models.Services.Application
             DataSet dataSet = await db.QueryAsync(query);
             var dataTable = dataSet.Tables[0];
             var courseList = new List<CourseViewModel>();
-            foreach(DataRow courseRow in dataTable.Rows) {
+            foreach (DataRow courseRow in dataTable.Rows)
+            {
                 CourseViewModel courseViewModel = CourseViewModel.FromDataRow(courseRow);
                 courseList.Add(courseViewModel);
             }

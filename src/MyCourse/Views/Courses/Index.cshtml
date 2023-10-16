@@ -1,4 +1,4 @@
-﻿@model List<CourseViewModel>
+@model List<CourseViewModel>
 <h1>@ViewData["Title"]</h1>
 
 @foreach(CourseViewModel course in Model)
@@ -6,7 +6,7 @@
 <hr>
 <div class="row course">
     <div class="col-md-1">
-        <img src="@course.ImagePath" width="52" height="52">
+        <img src="@course.ImagePath" width="52" height="52" alt="@course.Title">
     </div>
     <div class="col-md-5">
         <h2>@course.Title</h2>
@@ -19,9 +19,9 @@
             {
                 <i class="fas fa-star"></i>
             }
-            else if (course.Rating > i -1)
+            else if (course.Rating > i - 1)
             {
-                <i class="fafas fa-star-half-alt"></i>
+                <i class="fas fa-star-half-alt"></i>
             }
             else
             {
@@ -30,12 +30,13 @@
         }
     </div>
     <div class="col-md-2 price">
-        @course.CurrentPrice@if(!course.CurrentPrice.Equals(course.FullPrice)){
+        @course.CurrentPrice
+        @if(!course.CurrentPrice.Equals(course.FullPrice)) {
             <br><s>@course.FullPrice</s>
         }
     </div>
     <div class="col-md-2 d-flex align-items-center">
-      <a class="btn btn-outline-primary" asp-action="Detail" asp-route-id="5">Dettaglio</a>  
+      <a class="btn btn-outline-primary" asp-action="Detail" asp-route-id="@course.Id">Dettaglio</a>
     </div>
 </div>
 }

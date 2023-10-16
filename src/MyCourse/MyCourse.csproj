@@ -1,5 +1,4 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
-
   <PropertyGroup>
     <TargetFramework>netcoreapp2.2</TargetFramework>
     <UserSecretsId>MyCourse</UserSecretsId>
@@ -7,15 +6,13 @@
 
   <ItemGroup>
     <Folder Include="wwwroot\" />
-    <Compile Remove="Models\Services\Application\CourseService.cs" />
+    <Compile Remove="Models/Services/Application/CourseService.cs" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
-    <PackageReference Include="Microsoft.Data.SQLite" Version="7.0.8" />
+    <PackageReference Include="Microsoft.Data.SQLite" Version="2.2.2" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="2.2.4" />
-    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.2.4" />
   </ItemGroup>
-
 </Project>

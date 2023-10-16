@@ -4,5 +4,4 @@ namespace MyCourse.Models.Options
     {
         public string Default { get; set; }
     }
-    
 }

@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using MyCourse.Models.Services.Application;
@@ -9,7 +9,7 @@ namespace MyCourse.Controllers
     public class CoursesController : Controller
     {
         private readonly ICourseService courseService;
-        public CoursesController(ICourseService courseService)
+        public CoursesController(ICachedCourseService courseService)
         {
             this.courseService = courseService;
         }
