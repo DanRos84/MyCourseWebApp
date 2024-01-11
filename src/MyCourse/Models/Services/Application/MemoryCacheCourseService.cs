@@ -28,6 +28,23 @@ namespace MyCourse.Models.Services.Application
                 return courseService.GetCourseAsync(id);
             });
         }
+        public Task<List<CourseViewModel>> GetBestRatingCoursesAsync()
+        {
+            return memoryCache.GetOrCreateAsync($"BestRatingCourses", cacheEntry =>
+            {
+                cacheEntry.SetAbsoluteExpiration(TimeSpan.FromSeconds(60));
+                return courseService.GetBestRatingCoursesAsync();
+            });
+        }
+
+        public Task<List<CourseViewModel>> GetMostRecentCoursesAsync()
+        {
+            return memoryCache.GetOrCreateAsync($"MostRecentCourses", cacheEntry =>
+            {
+                cacheEntry.SetAbsoluteExpiration(TimeSpan.FromSeconds(60));
+                return courseService.GetMostRecentCoursesAsync();
+            });
+        }
 
         public Task<ListViewModel<CourseViewModel>> GetCoursesAsync(CourseListInputModel model)
         {
