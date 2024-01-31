@@ -11,6 +11,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using MyCourse.Models.Options;
 using MyCourse.Models.Services.Application;
 using MyCourse.Models.Services.Infrastructure;
@@ -31,7 +32,9 @@ namespace MyCourse
         {
             services.AddResponseCaching();
 
-            services.AddMvc(options => 
+#pragma warning disable ASP5001 // Type or member is obsolete
+            services.AddMvc(options =>
+#pragma warning disable CS0618 // Type or member is obsolete
             {
                 var homeProfile = new CacheProfile();
                 //homeProfile.Duration = Configuration.GetValue<int>("ResponseCache:Home:Duration");
@@ -40,7 +43,9 @@ namespace MyCourse
                 Configuration.Bind("ResponseCache:Home", homeProfile);
                 options.CacheProfiles.Add("Home", homeProfile);
                 
-            }).SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            }).SetCompatibilityVersion(CompatibilityVersion.Latest);
+#pragma warning restore CS0618 // Type or member is obsolete
+#pragma warning restore ASP5001 // Type or member is obsolete
             services.AddTransient<ICourseService, AdoNetCourseService>();
             //services.AddTransient<ICourseService, EfCoreCourseService>();
             services.AddTransient<IDatabaseAccessor, SqliteDatabaseAccessor>();
@@ -58,7 +63,7 @@ namespace MyCourse
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, IApplicationLifetime lifetime)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IHostApplicationLifetime lifetime)
         {
             //if (env.IsDevelopment())
             if (env.IsEnvironment("Development"))
@@ -81,11 +86,13 @@ namespace MyCourse
 
             app.UseResponseCaching();
             //app.UseMvcWithDefaultRoute();
+#pragma warning disable MVC1005 // Cannot use UseMvc with Endpoint Routing
             app.UseMvc(routeBuilder => 
             {
                 // Esempio di percorso conforme al template route: /courses/detail/5
                 routeBuilder.MapRoute("default", "{controller=Home}/{action=Index}/{id?}");
             });
+#pragma warning restore MVC1005 // Cannot use UseMvc with Endpoint Routing
         }
     }
 }
