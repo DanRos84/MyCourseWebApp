@@ -36,6 +36,7 @@ namespace MyCourse
             services.AddMvc(options =>
 #pragma warning disable CS0618 // Type or member is obsolete
             {
+                options.EnableEndpointRouting = false;
                 var homeProfile = new CacheProfile();
                 //homeProfile.Duration = Configuration.GetValue<int>("ResponseCache:Home:Duration");
                 //homeProfile.Location = Configuration.GetValue<ResponseCacheLocation>("ResponseCache:Home:Location");
@@ -84,15 +85,20 @@ namespace MyCourse
             
             app.UseStaticFiles();
 
+            //EndpointRoutingMiddleware
+            app.UseRouting();
+
             app.UseResponseCaching();
-            //app.UseMvcWithDefaultRoute();
-#pragma warning disable MVC1005 // Cannot use UseMvc with Endpoint Routing
-            app.UseMvc(routeBuilder => 
-            {
-                // Esempio di percorso conforme al template route: /courses/detail/5
-                routeBuilder.MapRoute("default", "{controller=Home}/{action=Index}/{id?}");
+
+            app.UseEndpoints(routeBuilder => {
+                routeBuilder.MapControllerRoute("default", "{controller=Home}/{action=Index}/{id?}");
             });
-#pragma warning restore MVC1005 // Cannot use UseMvc with Endpoint Routing
+            ////app.UseMvcWithDefaultRoute();
+            //app.UseMvc(routeBuilder => 
+            //{
+            //    // Esempio di percorso conforme al template route: /courses/detail/5
+            //    routeBuilder.MapRoute("default", "{controller=Home}/{action=Index}/{id?}");
+            //});
         }
     }
 }
