@@ -43,10 +43,14 @@ namespace MyCourse
                 //homeProfile.VaryByQueryKeys = new string[] { "page" };
                 Configuration.Bind("ResponseCache:Home", homeProfile);
                 options.CacheProfiles.Add("Home", homeProfile);
-                
-            }).SetCompatibilityVersion(CompatibilityVersion.Latest);
+
+            }).SetCompatibilityVersion(CompatibilityVersion.Latest)
 #pragma warning restore CS0618 // Type or member is obsolete
 #pragma warning restore ASP5001 // Type or member is obsolete
+#if DEBUG
+            .AddRazorRuntimeCompilation()
+#endif
+            ;
             services.AddTransient<ICourseService, AdoNetCourseService>();
             //services.AddTransient<ICourseService, EfCoreCourseService>();
             services.AddTransient<IDatabaseAccessor, SqliteDatabaseAccessor>();
