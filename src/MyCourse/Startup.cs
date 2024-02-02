@@ -51,15 +51,24 @@ namespace MyCourse
             .AddRazorRuntimeCompilation()
 #endif
             ;
-            //services.AddTransient<ICourseService, AdoNetCourseService>();
-            services.AddTransient<ICourseService, EfCoreCourseService>();
-            services.AddTransient<IDatabaseAccessor, SqliteDatabaseAccessor>();
-            services.AddTransient<ICachedCourseService, MemoryCacheCourseService>();
 
-            services.AddDbContextPool<MyCourseDbContext>(optionsBuilder => {
-                string connectionString = Configuration.GetSection("ConnectionStrings").GetValue<string>("Default");
-                optionsBuilder.UseSqlite(connectionString);
-            });
+            //Usiamo ADO.NET o Entity Framework Core per l'accesso ai dati?
+            bool useAdoNet = true;
+            if (useAdoNet)
+            {
+                services.AddTransient<ICourseService, AdoNetCourseService>();
+                services.AddTransient<IDatabaseAccessor, SqliteDatabaseAccessor>();
+            }
+            else
+            {
+                services.AddTransient<ICourseService, EfCoreCourseService>();
+                services.AddDbContextPool<MyCourseDbContext>(optionsBuilder => {
+                    string connectionString = Configuration.GetSection("ConnectionStrings").GetValue<string>("Default");
+                    optionsBuilder.UseSqlite(connectionString);
+                });
+            }
+
+            services.AddTransient<ICachedCourseService, MemoryCacheCourseService>();
 
             //Options
             services.Configure<CoursesOptions>(Configuration.GetSection("Courses"));
