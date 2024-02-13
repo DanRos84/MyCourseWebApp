@@ -44,6 +44,14 @@ namespace MyCourse.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(CourseCreateInputModel inputModel)
         {
+            if (!ModelState.IsValid)
+            {
+                // se vogliamo recuperare gli errori possiamo fare così e poi ciclare con un foreach
+                //IEnumerable<ModelError> errors = ModelState.Values.SelectMany(valiue => valiue.Errors);
+
+                return View(inputModel);
+            }
+
             CourseDetailViewModel course = await courseService.CreateCourseAsync(inputModel);
             return RedirectToAction(nameof(Index));
         }
