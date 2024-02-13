@@ -1,22 +1,51 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
+using MyCourse.Models.InputModels;
+using MyCourse.Models.Services.Application;
+using MyCourse.Models.ViewModels;
 
 namespace MyCourse.Controllers
 {
     public class CoursesController : Controller
     {
-        public IActionResult Index()
+        private readonly ICourseService courseService;
+        public CoursesController(ICachedCourseService courseService)
         {
-            //return View();
-            return Content("Sono Index");
+            this.courseService = courseService;
+        }
+        public async Task<IActionResult> Index(CourseListInputModel input)
+        {
+            ViewData["Title"] = "Catalogo dei corsi";
+            ListViewModel<CourseViewModel> courses = await courseService.GetCoursesAsync(input);
+
+            CourseListViewModel viewModel = new CourseListViewModel
+            {
+                Courses = courses,
+                Input = input
+            };
+
+            return View(viewModel);
         }
 
-        public IActionResult Detail(string id)
+        public async Task<IActionResult> Detail(int id)
         {
-            return Content($"Sono Detail, ho ricevuto l'id {id}");
+            CourseDetailViewModel viewModel = await courseService.GetCourseAsync(id);
+            ViewData["Title"] = viewModel.Title;
+            return View(viewModel);
+        }
+
+        public IActionResult Create() 
+        {
+            var inputModel = new CourseCreateInputModel();
+            return View(inputModel);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Create(CourseCreateInputModel inputModel)
+        {
+            CourseDetailViewModel course = await courseService.CreateCourseAsync(inputModel);
+            return RedirectToAction(nameof(Index));
         }
     }
 }

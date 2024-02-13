@@ -1,0 +1,33 @@
+@model CourseListViewModel
+<div class="row">
+    <div class="col-md-8">
+        <h1>@ViewData["Title"] <a class="btn btn-outline-primary btn-sm" asp-action="Create"><i class="fa fa-plus"></i> Crea nuovo</a></h1>
+    </div>
+    <div class="col-md-4 d-flex align-items-center">
+        <form asp-controller="Courses" asp-action="Index" method="get">
+            <div class="input-group">
+                <input type="text" name="search" class="form-control" placeholder="Cerca..." aria-label="Cerca..." aria-describedby="search-button" value="@Model.Input.Search">
+                <div class="input-group-append">
+                    <button class="input-group-text" id="search-button"><i class="fas fas fa-search"></i></button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+
+<div class="row">
+    <div class="col-md-1"></div>
+    <div class="col-md-5"><order-link order-by="Title" Input="@Model.Input">Titolo</order-link></div>
+    <div class="col-md-2"><order-link order-by="Rating" Input="@Model.Input">Valutazione</order-link></div>
+    <div class="col-md-2"><order-link order-by="CurrentPrice" Input="@Model.Input">Prezzo</order-link></div>
+    <div class="col-md-2"></div>
+</div>
+
+@foreach(CourseViewModel course in Model.Courses.Results)
+{
+    <partial name="Courses/_CourseLine" model="@course"></partial>
+}
+
+<vc:pagination-bar model="@Model"></vc:pagination-bar>
