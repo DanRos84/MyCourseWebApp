@@ -37,6 +37,7 @@ namespace MyCourse.Controllers
 
         public IActionResult Create() 
         {
+            ViewData["Title"] = "Nuovo Corso";
             var inputModel = new CourseCreateInputModel();
             return View(inputModel);
         }
@@ -49,6 +50,7 @@ namespace MyCourse.Controllers
                 // se vogliamo recuperare gli errori possiamo fare così e poi ciclare con un foreach
                 //IEnumerable<ModelError> errors = ModelState.Values.SelectMany(valiue => valiue.Errors);
 
+                ViewData["Title"] = "Nuovo Corso";
                 return View(inputModel);
             }
 
