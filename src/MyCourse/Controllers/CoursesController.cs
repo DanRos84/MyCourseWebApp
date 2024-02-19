@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using MyCourse.Models.Exceptions;
 using MyCourse.Models.InputModels;
 using MyCourse.Models.Services.Application;
 using MyCourse.Models.ViewModels;
@@ -45,17 +46,22 @@ namespace MyCourse.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(CourseCreateInputModel inputModel)
         {
-            if (!ModelState.IsValid)
-            {
-                // se vogliamo recuperare gli errori possiamo fare così e poi ciclare con un foreach
-                //IEnumerable<ModelError> errors = ModelState.Values.SelectMany(valiue => valiue.Errors);
 
-                ViewData["Title"] = "Nuovo Corso";
-                return View(inputModel);
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    CourseDetailViewModel course = await courseService.CreateCourseAsync(inputModel);
+                    return RedirectToAction(nameof(Index));
+                }
+                catch (CourseTitleUnavailableException)
+                {
+                    ModelState.AddModelError(nameof(CourseDetailViewModel.Title), "Questo titolo è già esistente");
+                }
             }
 
-            CourseDetailViewModel course = await courseService.CreateCourseAsync(inputModel);
-            return RedirectToAction(nameof(Index));
+            ViewData["Title"] = "Nuovo Corso";
+            return View(inputModel);
         }
     }
 }
