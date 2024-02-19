@@ -56,12 +56,18 @@ namespace MyCourse.Controllers
                 }
                 catch (CourseTitleUnavailableException)
                 {
-                    ModelState.AddModelError(nameof(CourseDetailViewModel.Title), "Questo titolo è già esistente");
+                    ModelState.AddModelError(nameof(CourseDetailViewModel.Title), "Questo titolo ï¿½ giï¿½ esistente");
                 }
             }
 
             ViewData["Title"] = "Nuovo Corso";
             return View(inputModel);
+        }
+
+        public async Task<IActionResult> IsTitleAvailable(string title)
+        {
+            bool result = await courseService.IsTitleAvailableAsync(title);
+            return Json(result);
         }
     }
 }
