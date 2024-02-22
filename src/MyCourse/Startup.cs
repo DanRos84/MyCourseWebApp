@@ -1,17 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
+using System.Web;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using MyCourse.Customizations.ModelBinders;
 using MyCourse.Models.Enums;
 using MyCourse.Models.Options;
 using MyCourse.Models.Services.Application;
@@ -44,6 +42,8 @@ namespace MyCourse
                 //homeProfile.VaryByQueryKeys = new string[] { "page" };
                 Configuration.Bind("ResponseCache:Home", homeProfile);
                 options.CacheProfiles.Add("Home", homeProfile);
+
+                options.ModelBinderProviders.Insert(0, new DecimalModelBinderProvider());
 
             }).SetCompatibilityVersion(CompatibilityVersion.Latest)
 #pragma warning restore CS0618 // Type or member is obsolete
