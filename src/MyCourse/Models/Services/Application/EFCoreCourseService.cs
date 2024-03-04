@@ -20,6 +20,7 @@ namespace MyCourse.Models.Services.Application
         private readonly ILogger<EfCoreCourseService> logger;
         private readonly MyCourseDbContext dbContext;
         private readonly IOptionsMonitor<CoursesOptions> coursesOptions;
+        private readonly IImagePersister imagePersister;
 
         public EfCoreCourseService(ILogger<EfCoreCourseService> logger, MyCourseDbContext dbContext, IOptionsMonitor<CoursesOptions> coursesOptions)
         {
@@ -144,6 +145,12 @@ namespace MyCourse.Models.Services.Application
             course.ChangePrices(inputModel.FullPrice, inputModel.CurrentPrice);
             course.ChangeDescription(inputModel.Description);
             course.ChangeEmail(inputModel.Email);
+
+            if (inputModel.Image != null)
+            {
+                string imagePath = await imagePersister.SaveCourseImageAsync(inputModel.Id, inputModel.Image);
+                course.ChangeImagePath(imagePath);
+            }
 
             //se l'entità è tracciata non è necessario invocare questo metodo
             //dbContext.Update(course);
