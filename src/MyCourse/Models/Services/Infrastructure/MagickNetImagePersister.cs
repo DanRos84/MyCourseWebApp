@@ -15,14 +15,14 @@ namespace MyCourse.Models.Services.Infrastructure
             this.env = env;
         }
 
-        public async Task<string> SaveCourseImageAsync(int courseId, IFormFile formFile)
+        public Task<string> SaveCourseImageAsync(int courseId, IFormFile formFile)
         {
             //Salvare il file
-            string path = $"/Course/{courseId}.jpg";
+            string path = $"/Courses/{courseId}.jpg";
             string physicalPath = Path.Combine(env.WebRootPath, "Courses", $"{courseId}.jpg");
 
             using Stream inputStream = formFile.OpenReadStream();
-            using IMagickImage image = new MagickImage(inputStream);
+            using MagickImage image = new MagickImage(inputStream);
 
             //Manipolare l'immagine
             int width = 300;  //Esercizio: ottenere questi valori dalla configurazione
@@ -37,8 +37,8 @@ namespace MyCourse.Models.Services.Infrastructure
             image.Quality = 70;
             image.Write(physicalPath, MagickFormat.Jpg);
 
-            // Restituire il percorso del File
-            return path;
+            //Restituire il percorso al file
+            return Task.FromResult(path);
         }
     }
 }
