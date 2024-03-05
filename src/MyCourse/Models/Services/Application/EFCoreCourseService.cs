@@ -148,8 +148,15 @@ namespace MyCourse.Models.Services.Application
 
             if (inputModel.Image != null)
             {
-                string imagePath = await imagePersister.SaveCourseImageAsync(inputModel.Id, inputModel.Image);
-                course.ChangeImagePath(imagePath);
+                try
+                {
+                    string imagePath = await imagePersister.SaveCourseImageAsync(inputModel.Id, inputModel.Image);
+                    course.ChangeImagePath(imagePath);
+                }
+                catch (Exception exc)
+                {
+                    throw new CourseImageInvalidException(inputModel.Id, exc);
+                }
             }
 
             //se l'entità è tracciata non è necessario invocare questo metodo
