@@ -1,7 +1,6 @@
 using System.Text;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using MyCourse.Models.ValueObjects;
-using MyCourse.Models.ValueTypes;
 
 namespace MyCourse.Customizations.TagHelpers
 {

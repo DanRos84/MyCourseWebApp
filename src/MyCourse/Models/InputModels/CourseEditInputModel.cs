@@ -8,7 +8,6 @@ using MyCourse.Controllers;
 using MyCourse.Models.Entities;
 using MyCourse.Models.Enums;
 using MyCourse.Models.ValueObjects;
-using MyCourse.Models.ValueTypes;
 
 namespace MyCourse.Models.InputModels
 {
