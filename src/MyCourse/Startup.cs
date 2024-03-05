@@ -1,9 +1,9 @@
 ﻿using System;
 using System.IO;
-using System.Web;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
@@ -79,6 +79,7 @@ namespace MyCourse
             services.Configure<CoursesOptions>(Configuration.GetSection("Courses"));
             services.Configure<ConnectionStringsOptions>(Configuration.GetSection("ConnectionStrings"));
             services.Configure<MemoryCacheOptions>(Configuration.GetSection("MemoryCache"));
+            services.Configure<KestrelServerOptions>(Configuration.GetSection("Kestrel"));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
