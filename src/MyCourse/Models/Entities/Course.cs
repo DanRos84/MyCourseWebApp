@@ -9,12 +9,11 @@ namespace MyCourse.Models.Entities
     {
         public Course(string title, string author)
         {
-
-            if (string.IsNullOrWhiteSpace(title))
+		    if (string.IsNullOrWhiteSpace(title))
             {
                 throw new ArgumentException("The course must have a title");
             }
-            if (string.IsNullOrWhiteSpace(title))
+			if (string.IsNullOrWhiteSpace(author))
             {
                 throw new ArgumentException("The course must have an author");
             }
@@ -23,7 +22,7 @@ namespace MyCourse.Models.Entities
             Author = author;
             Lessons = new HashSet<Lesson>();
             CurrentPrice = new Money(Currency.EUR, 0);
-            FullPrice= new Money(Currency.EUR, 0);
+            FullPrice = new Money(Currency.EUR, 0);
             ImagePath = "/Courses/default.png";
         }
 
@@ -39,15 +38,12 @@ namespace MyCourse.Models.Entities
 
         public void ChangeTitle(string newTitle)
         {
-            
             if (string.IsNullOrWhiteSpace(newTitle))
             {
                 throw new ArgumentException("The course must have a title");
             }
-
             Title = newTitle;
         }
-
 
         public void ChangePrices(Money newFullPrice, Money newCurrentPrice)
         {
@@ -92,7 +88,7 @@ namespace MyCourse.Models.Entities
             Description = newDescription;
         }
 
-        internal void ChangeImagePath(string imagePath)
+        public void ChangeImagePath(string imagePath)
         {
             ImagePath = imagePath;
         }

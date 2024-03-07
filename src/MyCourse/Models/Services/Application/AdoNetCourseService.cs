@@ -66,7 +66,7 @@ namespace MyCourse.Models.Services.Application
             var courseTable = dataSet.Tables[0];
             if (courseTable.Rows.Count != 1)
             {
-                logger.LogWarning("Course {id} npot found", id);
+                logger.LogWarning("Course {id} not found", id);
                 throw new CourseNotFoundException(id);
             }
             var courseRow = courseTable.Rows[0];

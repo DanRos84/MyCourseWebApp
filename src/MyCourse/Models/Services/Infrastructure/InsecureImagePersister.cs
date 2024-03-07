@@ -17,10 +17,10 @@ namespace MyCourse.Models.Services.Infrastructure
         public async Task<string> SaveCourseImageAsync(int courseId, IFormFile formFile)
         {
             //Salvare il file
-            string path = $"/Course/{courseId}.jpg";
+            string path = $"/Courses/{courseId}.jpg";
             string physicalPath = Path.Combine(env.WebRootPath, "Courses", $"{courseId}.jpg");
-            using FileStream fileStream = File.OpenWrite( physicalPath );
-            await formFile.CopyToAsync( fileStream );
+            using FileStream fileStream = File.OpenWrite(physicalPath);
+            await formFile.CopyToAsync(fileStream);
 
             // Restituire il percorso del File
             return path;

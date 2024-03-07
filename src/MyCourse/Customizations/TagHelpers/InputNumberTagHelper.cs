@@ -21,11 +21,11 @@ namespace MyCourse.Customizations.TagHelpers
             {
                 return;
             }
-            if (For.ModelExplorer.ModelType == typeof(decimal))
+            if (For.ModelExplorer.ModelType != typeof(decimal))
             {
                 return;
             }
-            decimal value = (decimal)For.Model;
+            decimal value = (decimal) For.Model;
             string formattedValue = value.ToString("F2", CultureInfo.InvariantCulture);
             output.Attributes.SetAttribute("value", formattedValue);
         }
