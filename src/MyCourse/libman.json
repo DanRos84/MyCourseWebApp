@@ -33,17 +33,47 @@
       ]
     },
     {
-      "library": "jquery@3.3.1",
-      "destination": "wwwroot\\lib\\jquery",
-      "files": [
-        "dist/jquery.slim.min.js"
-      ]
-    },
-    {
       "library": "popper.js@1.14.6",
       "destination": "wwwroot\\lib\\popper",
       "files": [
         "dist/umd/popper.min.js"
+      ]
+    },
+    {
+      "library": "jquery-validation@1.20.0",
+      "destination": "wwwroot/lib/jquery-validation",
+      "files": [
+        "dist/jquery.validate.min.js",
+        "dist/localization/messages_it.min.js",
+        "dist/additional-methods.min.js"
+      ]
+    },
+    {
+      "library": "jquery-validation-unobtrusive@4.0.0",
+      "destination": "wwwroot/lib/jquery-validation-unobtrusive",
+      "files": [
+        "dist/jquery.validate.unobtrusive.min.js"
+      ]
+    },
+    {
+      "library": "jquery@3.3.1",
+      "destination": "wwwroot/lib/jquery",
+      "files": [
+        "dist/jquery.min.js",
+        "dist/jquery.slim.min.js"
+      ]
+    },
+    {
+      "library": "summernote@0.8.18",
+      "destination": "wwwroot/lib/summernote",
+      "files": [
+        "dist/font/summernote.eot",
+        "dist/font/summernote.ttf",
+        "dist/font/summernote.woff",
+        "dist/font/summernote.woff2",
+        "dist/summernote-bs4.min.css",
+        "dist/summernote-bs4.min.js",
+        "dist/lang/summernote-it-IT.js"
       ]
     }
   ]

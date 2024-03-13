@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Caching.Memory;
 using MyCourse.Models.InputModels;
@@ -17,8 +16,6 @@ namespace MyCourse.Models.Services.Application
             this.courseService = courseService;
             this.memoryCache = memoryCache;
         }
-
-        //TODO: ricordati di usare memoryCache.Remove($"Course{id}") quando aggiorni il corso
 
         public Task<CourseDetailViewModel> GetCourseAsync(int id)
         {
@@ -71,6 +68,23 @@ namespace MyCourse.Models.Services.Application
         public Task<CourseDetailViewModel> CreateCourseAsync(CourseCreateInputModel inputModel)
         {
             return courseService.CreateCourseAsync(inputModel);
+        }
+
+        public Task<bool> IsTitleAvailableAsync(string title, int id)
+        {
+            return courseService.IsTitleAvailableAsync(title, id);
+        }
+
+        public Task<CourseEditInputModel> GetCourseForEditingAsync(int id)
+        {
+            return courseService.GetCourseForEditingAsync(id);
+        }
+
+        public async Task<CourseDetailViewModel> EditCourseAsync(CourseEditInputModel inputModel)
+        {
+            CourseDetailViewModel viewModel =  await courseService.EditCourseAsync(inputModel);
+            memoryCache.Remove($"Course{inputModel.Id}");
+            return viewModel;
         }
     }
 }
